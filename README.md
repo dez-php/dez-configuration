@@ -1,2 +1,1 @@
-# dez-config
-DezPHP - Config Component
+# dez-configuration
