@@ -7,12 +7,10 @@ use Dez\Config\Config;
 
 include_once '../vendor/autoload.php';
 
-$config     = new Dez\Config\Adapter\NativeArray( './_config.php' );
-
-$configJson = new Dez\Config\Adapter\Json( './_config.json' );
-
-$configIni  = Config::fatory( './_config.ini' );
+$config     = new Dez\Config\Adapter\NativeArray('./_config.php');
+$configJson = new Dez\Config\Adapter\Json('./_config.json');
 
 die(var_dump(
-    $config->merge( $configJson )->merge( $configIni )->get( 'database' )->toArray()
+    Config::factory('./_config.ini')
+        ->merge($configJson)->toObject()
 ));

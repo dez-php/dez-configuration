@@ -15,7 +15,8 @@
          * @param string $filePath
          * @throws Exception
          */
-        public function __construct( $filePath = '' ) {
+        public function __construct( $filePath = '' )
+        {
             if( ! file_exists( $filePath ) ) {
                 throw new Exception("Config file dont exists {$filePath}");
             }

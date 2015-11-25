@@ -20,7 +20,8 @@
         /**
          * @param array $configArray
          */
-        public function __construct( array $configArray = [] ) {
+        public function __construct( array $configArray = [] )
+        {
             foreach( $configArray as $key => $value )
                 $this->offsetSet( $key, $value );
         }
@@ -29,35 +30,40 @@
          * @param $name
          * @return null
          */
-        public function __get( $name ) {
+        public function __get( $name )
+        {
             return $this->get( $name );
         }
 
 
         /**
-         * @param string $filePath
-         * @return IniAdapter|JsonAdapter|ArrayAdapter
+         * @param $configResource
+         * @return IniAdapter|JsonAdapter|ArrayAdapter|Config
          * @throws Exception
          */
-        static public function fatory( $filePath = '' ) {
+        static public function factory( $configResource )
+        {
+            if(is_array($configResource)) {
+                return new Config($configResource);
+            }
 
-            list( $fileExtention )    = array_reverse( explode( '.', $filePath ) );
+            list( $fileExtension )    = array_reverse( explode( '.', $configResource ) );
 
-            switch ( $fileExtention ) {
+            switch ( $fileExtension ) {
                 case 'json': {
-                    return new JsonAdapter( $filePath );
+                    return new JsonAdapter( $configResource );
                     break;
                 }
                 case 'php': {
-                    return new ArrayAdapter( $filePath );
+                    return new ArrayAdapter( $configResource );
                     break;
                 }
                 case 'ini': {
-                    return new IniAdapter( $filePath );
+                    return new IniAdapter( $configResource );
                     break;
                 }
                 default: {
-                    throw new Exception( 'Unknown config type' );
+                    throw new Exception( 'Unknown config resource' );
                 }
             }
 
@@ -68,7 +74,8 @@
          * @param null $default
          * @return null|static
          */
-        public function get( $name = null, $default = null ) {
+        public function get( $name = null, $default = null )
+        {
             return $this->has( $name ) ? $this->config[$name] : $default;
         }
 
@@ -76,7 +83,8 @@
          * @param ConfigInterface $config
          * @return Config
          */
-        public function merge( ConfigInterface $config ) {
+        public function merge( ConfigInterface $config )
+        {
             return $this->_merge( $config, $this );
         }
 
@@ -85,8 +93,8 @@
          * @param ConfigInterface $instance
          * @return ConfigInterface
          */
-        protected function _merge( ConfigInterface $config, ConfigInterface $instance ) {
-
+        protected function _merge( ConfigInterface $config, ConfigInterface $instance )
+        {
             foreach( $config as $key => $value ) {
                 if( isset( $instance[ $key ] ) && is_object( $instance[ $key ] ) && is_object( $value ) ) {
                     $this->_merge( $value, $instance[ $key ] );
@@ -96,14 +104,13 @@
             }
 
             return $instance;
-
         }
 
         /**
          * @return \stdClass
          */
-        public function toObject() {
-
+        public function toObject()
+        {
             $configObject   = new \stdClass();
 
             foreach( $this as $property => $value ) {
@@ -117,14 +124,16 @@
         /**
          * @return array
          */
-        public function toArray() {
+        public function toArray()
+        {
             return json_decode( json_encode( $this->toObject() ), true );
         }
 
         /**
          * @return string
          */
-        public function toJSON() {
+        public function toJSON()
+        {
             return json_encode( $this->toObject(), JSON_PRETTY_PRINT );
         }
 
@@ -132,21 +141,24 @@
          * @param $name
          * @return bool
          */
-        public function has( $name ) {
+        public function has( $name )
+        {
             return isset( $this->config[$name] );
         }
 
         /**
          * @return array
          */
-        public function keys() {
+        public function keys()
+        {
             return array_keys( $this->config );
         }
 
         /**
          * @return int
          */
-        public function count() {
+        public function count()
+        {
             return count( $this->config );
         }
 
@@ -154,7 +166,8 @@
          * @param mixed $index
          * @return bool
          */
-        public function offsetExists( $index ) {
+        public function offsetExists( $index )
+        {
             return $this->has( $index );
         }
 
@@ -162,7 +175,8 @@
          * @param mixed $index
          * @return null
          */
-        public function offsetUnset( $index ) {
+        public function offsetUnset( $index )
+        {
             unset( $this->config[$index] );
             return null;
         }
@@ -171,7 +185,8 @@
          * @param mixed $index
          * @return null
          */
-        public function offsetGet( $index ) {
+        public function offsetGet( $index )
+        {
             return $this->get( $index );
         }
 
@@ -180,7 +195,8 @@
          * @param mixed $value
          * @return $this
          */
-        public function offsetSet( $name, $value ) {
+        public function offsetSet( $name, $value )
+        {
             $this->config[$name] = is_array( $value ) ? new self( $value ) : $value;
             return $this;
         }
@@ -188,7 +204,8 @@
         /**
          * @return \ArrayIterator
          */
-        public function getIterator() {
+        public function getIterator()
+        {
             return new \ArrayIterator( $this->config );
         }
 
