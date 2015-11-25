@@ -2,6 +2,24 @@
 
 ## Usage
 
+#### examples
+
+```php
+<?php
+
+include_once '../vendor/autoload.php';
+
+$config     = new Dez\Config\Adapter\NativeArray('./app.php');
+
+$config->get('app')->get('path')->get('static');
+$config['app']['path']['base'];
+$config->app->path->base;
+$config->app['path']->get('static');
+
+$appJson    = $config['app']->toJSON();
+$pathArray  = $config->app['path']->toArray();
+```
+
 #### using adapters
 
 ```php
@@ -52,4 +70,18 @@ $configIni      = Config::factory('./app.ini');
 $configJson     = new Dez\Config\Adapter\Json('./site-setting.json');
 
 $globalConfig   = $config->merge($configIni)->merge($configJson);
+```
+
+#### extra methods
+
+```php
+<?php
+
+include_once '../vendor/autoload.php';
+
+$config         = new Dez\Config\Adapter\NativeArray('./connection.php');
+
+$config->toArray();
+$config->toJSON();
+$config->toObject();
 ```
