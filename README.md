@@ -7,7 +7,6 @@
 ```php
 <?php
 
-use Dez\Config\Config;
 include_once '../vendor/autoload.php';
 
 $config     = new Dez\Config\Adapter\NativeArray('./_config.php');
@@ -52,5 +51,5 @@ $config         = new Dez\Config\Adapter\NativeArray('./connection.php');
 $configIni      = Config::factory('./app.ini');
 $configJson     = new Dez\Config\Adapter\Json('./site-setting.json');
 
-$globalConfig   = $config->merge(->merge())->merge($configJson);
+$globalConfig   = $config->merge($configIni)->merge($configJson);
 ```
