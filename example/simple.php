@@ -10,7 +10,8 @@ include_once '../vendor/autoload.php';
 $config     = new Dez\Config\Adapter\NativeArray('./_config.php');
 $configJson = new Dez\Config\Adapter\Json('./_config.json');
 
-die(var_dump(
-    Config::factory('./_config.ini')
-        ->merge($configJson)->toObject()
-));
+$config = Config::factory('./_config.ini')
+    ->merge($configJson);
+
+echo $config->path('app.components')->get('auth');
+

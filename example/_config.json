@@ -4,6 +4,7 @@
       "host": "localhost",
       "b": "333qqq"
     },
+    "test": "123qwe",
     "components": {
       "auth": {
         "type": "simple merge from json",
