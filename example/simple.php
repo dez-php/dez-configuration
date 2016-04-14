@@ -13,5 +13,4 @@ $configJson = new Dez\Config\Adapter\Json('./_config.json');
 $config = Config::factory('./_config.ini')
     ->merge($configJson);
 
-echo $config->path('app.components')->get('auth');
-
+die(var_dump($config->toArray(), $config->toIni(), $config->toJSON(), $config->toPHP()));

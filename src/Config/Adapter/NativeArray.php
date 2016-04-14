@@ -1,26 +1,28 @@
 <?php
 
-    namespace Dez\Config\Adapter;
+namespace Dez\Config\Adapter;
 
-    use Dez\Config\Config;
-    use Dez\Config\Exception;
+use Dez\Config\Config;
+use Dez\Config\Exception;
+
+/**
+ * Class NativeArray
+ * @package Dez\Config\Adapter
+ */
+class NativeArray extends Config
+{
 
     /**
-     * Class NativeArray
-     * @package Dez\Config\Adapter
+     * @param string $filePath
+     * @throws Exception
      */
-    class NativeArray extends Config {
-
-        /**
-         * @param string $filePath
-         * @throws Exception
-         */
-        public function __construct( $filePath = '' )
-        {
-            if( ! file_exists( $filePath ) ) {
-                throw new Exception("Config file dont exists {$filePath}");
-            }
-            parent::__construct( require( $filePath ) );
+    public function __construct($filePath = '')
+    {
+        if (!file_exists($filePath)) {
+            throw new Exception("Config file dont exists {$filePath}");
         }
-
+        
+        parent::__construct(require($filePath));
     }
+
+}

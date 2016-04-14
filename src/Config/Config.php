@@ -13,6 +13,8 @@ use Dez\Config\Adapter\NativeArray as ArrayAdapter;
 class Config implements ConfigInterface
 {
 
+    const CONFIG_INI_SECTOR = 'dez-app-config';
+
     /**
      * @var array
      */
@@ -183,6 +185,45 @@ class Config implements ConfigInterface
     public function toArray()
     {
         return json_decode(json_encode($this->toObject()), true);
+    }
+
+    /**
+     * @return string
+     */
+    public function toPHP()
+    {
+        return var_export($this->toArray(), true) . ';' . PHP_EOL;
+    }
+
+    /**
+     * @return string
+     */
+    public function toIni()
+    {
+        $lines = ['[dez-app-config]'];
+        $this->createIni($this->toArray(), [], $lines);
+
+        return implode(PHP_EOL, $lines);
+    }
+
+    /**
+     * @param array $array
+     * @param array $indexes
+     * @param array $lines
+     */
+    private function createIni(array $array = [], $indexes = [], &$lines = [])
+    {
+        foreach ($array as $index => $value) {
+            $indexes[] = $index;
+
+            if(is_array($value)) {
+                $this->createIni($value, $indexes, $lines);
+            } else {
+                $lines[] = implode('.', $indexes) . '="' . addcslashes($value, '"') . '"';
+            }
+
+            array_pop($indexes);
+        }
     }
 
     /**
